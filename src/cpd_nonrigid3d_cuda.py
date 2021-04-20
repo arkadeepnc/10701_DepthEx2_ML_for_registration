@@ -13,7 +13,9 @@ from probreg import callbacks
 import utils
 import time
 
-source, target = utils.prepare_source_and_target_nonrigid_3d('face-x.txt', 'face-y.txt', voxel_size=5.0)
+# source, target = utils.prepare_source_and_target_nonrigid_3d('face-x.txt', 'face-y.txt', voxel_size=6.0)
+source, target = utils.prepare_source_and_target_nonrigid_3d('fish-x.txt', 'fish-y.txt', voxel_size=0.001)
+# source, target = utils.prepare_source_and_target_nonrigid_3d('bunny_source.txt', 'bunny_target.txt', voxel_size=0.00001)
 source_pt = cp.asarray(source.points, dtype=cp.float32)
 target_pt = cp.asarray(target.points, dtype=cp.float32)
 
@@ -29,5 +31,6 @@ result = tf_param.transform(source_pt)
 pc = o3.geometry.PointCloud()
 pc.points = o3.utility.Vector3dVector(to_cpu(result))
 pc.paint_uniform_color([0, 1, 0])
-target.paint_uniform_color([0, 0, 1])
-o3.visualization.draw_geometries([pc, target])
+target.paint_uniform_color([1, 0, 0])
+source.paint_uniform_color([0, 0, 0])
+o3.visualization.draw_geometries([pc, target, source])

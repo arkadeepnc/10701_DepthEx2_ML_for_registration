@@ -46,8 +46,19 @@ def prepare_source_and_target_nonrigid_3d(source_filename,
                                           voxel_size=5.0):
     source = o3.geometry.PointCloud()
     target = o3.geometry.PointCloud()
-    source.points = o3.utility.Vector3dVector(np.loadtxt(source_filename))
-    target.points = o3.utility.Vector3dVector(np.loadtxt(target_filename))
+    # if 2d convert to 3d by appending 0 in z
+    src = np.loadtxt(source_filename)
+    tmp = np.loadtxt(target_filename)
+
+    if src.shape[-1] == 2 :
+        _zeros = np.zeros((src.shape[0],1))
+        src = np.hstack([src, _zeros])
+    if tmp.shape[-1] == 2 :
+        _zeros = np.zeros((tmp.shape[0],1))
+        tmp = np.hstack([tmp, _zeros])
+
+    source.points = o3.utility.Vector3dVector(src)
+    target.points = o3.utility.Vector3dVector(tmp)
     source = source.voxel_down_sample(voxel_size=voxel_size)
     target = target.voxel_down_sample(voxel_size=voxel_size)
     print(source)
